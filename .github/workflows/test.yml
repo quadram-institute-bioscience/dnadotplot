@@ -1,0 +1,75 @@
+name: Test
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache Cargo dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Build
+      run: cargo build --release
+
+    - name: Run unit tests
+      run: cargo test
+
+    - name: Create test output directory
+      run: mkdir -p tests/output
+
+    - name: Test self-alignment PNG
+      run: ./target/release/dnadotplot -1 input/self.fa -o tests/output/self-self-test.png -w 1.0 --window 1 --revcompl
+
+    - name: Test self-alignment SVG
+      run: ./target/release/dnadotplot -1 input/seq1.fa -o tests/output/seq1-self-test.svg -w 1.0 --window 10 --revcompl --svg
+
+    - name: Test cross-alignment
+      run: ./target/release/dnadotplot -1 input/seq1.fa -2 input/seq2.fa -o tests/output/seq1-seq2-test.png -w 0.5 --window 10 --revcompl
+
+    - name: Test with different window size
+      run: ./target/release/dnadotplot -1 input/bbreve.fa -2 input/ecoli.fa -o tests/output/bbreve-ecoli-test.png -w 1000 --window 5
+
+    - name: Verify output files exist
+      run: |
+        ls -la tests/output/
+        test -f tests/output/self-self-test.png
+        test -f tests/output/seq1-self-test.svg
+        test -f tests/output/seq1-seq2-test.png
+        test -f tests/output/bbreve-ecoli-test.png
+
+    - name: Test comparison system
+      run: |
+        python3 -c "import sys; print(f'Python version: {sys.version}')"
+        python3 generate_comparison.py
+
+    - name: Upload test artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-outputs
+        path: |
+          tests/output/
+          tests/page/generated-imgs/
+          tests/page/index.html
