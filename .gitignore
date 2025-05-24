@@ -1,3 +1,6 @@
 /target
 tests/output/*.png
 tests/output/*.svg
+*.md
+!./README.md
+Cargo.lock
