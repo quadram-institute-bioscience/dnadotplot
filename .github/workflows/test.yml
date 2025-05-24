@@ -58,7 +58,7 @@ jobs:
     - name: Test comparison system
       run: |
         python3 -c "import sys; print(f'Python version: {sys.version}')"
-        python3 generate_comparison.py
+        python3 tests/debug/generate_comparison.py
 
     - name: Upload test artifacts
       uses: actions/upload-artifact@v4
