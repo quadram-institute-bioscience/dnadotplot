@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="560" height="560" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>
+.axis { stroke: #000; stroke-width: 1; }
+.grid { stroke: #ccc; stroke-width: 0.5; }
+.label { font-family: Arial, sans-serif; font-size: 12px; fill: #000; }
+.title { font-family: Arial, sans-serif; font-size: 14px; fill: #000; text-anchor: middle; }
+</style>
+</defs>
+
+<!-- Background -->
+<rect width="560" height="560" fill="white"/>
+
+<!-- Plot area background -->
+<rect x="80" y="80" width="400" height="400" fill="white" stroke="#000" stroke-width="1"/>
+<circle cx="80.0" cy="80.0" r="0.8" fill="#ff0000"/>
+<circle cx="84.8" cy="84.8" r="0.8" fill="#ff0000"/>
+<circle cx="89.5" cy="89.5" r="0.8" fill="#ff0000"/>
+<circle cx="94.3" cy="94.3" r="0.8" fill="#ff0000"/>
+<circle cx="99.0" cy="99.0" r="0.8" fill="#ff0000"/>
+<circle cx="103.8" cy="103.8" r="0.8" fill="#ff0000"/>
+<circle cx="108.6" cy="108.6" r="0.8" fill="#ff0000"/>
+<circle cx="113.3" cy="113.3" r="0.8" fill="#ff0000"/>
+<circle cx="118.1" cy="118.1" r="0.8" fill="#ff0000"/>
+<circle cx="122.9" cy="122.9" r="0.8" fill="#ff0000"/>
+<circle cx="127.6" cy="127.6" r="0.8" fill="#ff0000"/>
+<circle cx="132.4" cy="132.4" r="0.8" fill="#ff0000"/>
+<circle cx="137.1" cy="137.1" r="0.8" fill="#ff0000"/>
+<circle cx="141.9" cy="141.9" r="0.8" fill="#ff0000"/>
+<circle cx="146.7" cy="146.7" r="0.8" fill="#ff0000"/>
+<circle cx="151.4" cy="151.4" r="0.8" fill="#ff0000"/>
+<circle cx="156.2" cy="156.2" r="0.8" fill="#ff0000"/>
+<circle cx="161.0" cy="161.0" r="0.8" fill="#ff0000"/>
+<circle cx="165.7" cy="165.7" r="0.8" fill="#ff0000"/>
+<circle cx="170.5" cy="170.5" r="0.8" fill="#ff0000"/>
+<circle cx="175.2" cy="175.2" r="0.8" fill="#ff0000"/>
+<circle cx="180.0" cy="180.0" r="0.8" fill="#ff0000"/>
+<circle cx="184.8" cy="184.8" r="0.8" fill="#ff0000"/>
+<circle cx="189.5" cy="189.5" r="0.8" fill="#ff0000"/>
+<circle cx="194.3" cy="194.3" r="0.8" fill="#ff0000"/>
+<circle cx="199.0" cy="199.0" r="0.8" fill="#ff0000"/>
+<circle cx="203.8" cy="203.8" r="0.8" fill="#ff0000"/>
+<circle cx="208.6" cy="208.6" r="0.8" fill="#ff0000"/>
+<circle cx="213.3" cy="213.3" r="0.8" fill="#ff0000"/>
+<circle cx="218.1" cy="218.1" r="0.8" fill="#ff0000"/>
+<circle cx="222.9" cy="222.9" r="0.8" fill="#ff0000"/>
+<circle cx="227.6" cy="227.6" r="0.8" fill="#ff0000"/>
+<circle cx="232.4" cy="232.4" r="0.8" fill="#ff0000"/>
+<circle cx="237.1" cy="237.1" r="0.8" fill="#ff0000"/>
+<circle cx="241.9" cy="241.9" r="0.8" fill="#ff0000"/>
+<circle cx="246.7" cy="246.7" r="0.8" fill="#ff0000"/>
+<circle cx="251.4" cy="251.4" r="0.8" fill="#ff0000"/>
+<circle cx="256.2" cy="256.2" r="0.8" fill="#ff0000"/>
+<circle cx="261.0" cy="261.0" r="0.8" fill="#ff0000"/>
+<circle cx="265.7" cy="265.7" r="0.8" fill="#ff0000"/>
+<circle cx="270.5" cy="270.5" r="0.8" fill="#ff0000"/>
+<circle cx="275.2" cy="275.2" r="0.8" fill="#ff0000"/>
+<circle cx="280.0" cy="280.0" r="0.8" fill="#ff0000"/>
+<circle cx="284.8" cy="284.8" r="0.8" fill="#ff0000"/>
+<circle cx="289.5" cy="289.5" r="0.8" fill="#ff0000"/>
+<circle cx="294.3" cy="294.3" r="0.8" fill="#ff0000"/>
+<circle cx="299.0" cy="299.0" r="0.8" fill="#ff0000"/>
+<circle cx="303.8" cy="303.8" r="0.8" fill="#ff0000"/>
+<circle cx="308.6" cy="308.6" r="0.8" fill="#ff0000"/>
+<circle cx="313.3" cy="313.3" r="0.8" fill="#ff0000"/>
+<circle cx="318.1" cy="318.1" r="0.8" fill="#ff0000"/>
+<circle cx="327.6" cy="327.6" r="0.8" fill="#ff0000"/>
+<circle cx="332.4" cy="332.4" r="0.8" fill="#ff0000"/>
+<circle cx="337.1" cy="337.1" r="0.8" fill="#ff0000"/>
+<circle cx="341.9" cy="341.9" r="0.8" fill="#ff0000"/>
+<circle cx="346.7" cy="346.7" r="0.8" fill="#ff0000"/>
+<circle cx="351.4" cy="351.4" r="0.8" fill="#ff0000"/>
+<circle cx="356.2" cy="356.2" r="0.8" fill="#ff0000"/>
+<circle cx="365.7" cy="365.7" r="0.8" fill="#ff0000"/>
+<circle cx="370.5" cy="370.5" r="0.8" fill="#ff0000"/>
+<circle cx="375.2" cy="375.2" r="0.8" fill="#ff0000"/>
+<circle cx="380.0" cy="380.0" r="0.8" fill="#ff0000"/>
+<circle cx="384.8" cy="384.8" r="0.8" fill="#ff0000"/>
+<circle cx="389.5" cy="389.5" r="0.8" fill="#ff0000"/>
+<circle cx="394.3" cy="394.3" r="0.8" fill="#ff0000"/>
+<circle cx="399.0" cy="399.0" r="0.8" fill="#ff0000"/>
+<circle cx="403.8" cy="403.8" r="0.8" fill="#ff0000"/>
+<circle cx="408.6" cy="408.6" r="0.8" fill="#ff0000"/>
+<circle cx="413.3" cy="413.3" r="0.8" fill="#ff0000"/>
+<circle cx="418.1" cy="418.1" r="0.8" fill="#ff0000"/>
+<circle cx="422.9" cy="422.9" r="0.8" fill="#ff0000"/>
+<circle cx="427.6" cy="427.6" r="0.8" fill="#ff0000"/>
+<circle cx="432.4" cy="432.4" r="0.8" fill="#ff0000"/>
+<line x1="80.0" y1="480.0" x2="80.0" y2="485.0" class="axis"/>
+<text x="80.0" y="500.0" class="label" text-anchor="middle">0</text>
+<line x1="124.4" y1="480.0" x2="124.4" y2="485.0" class="axis"/>
+<line x1="124.4" y1="80.0" x2="124.4" y2="480.0" class="grid"/>
+<text x="124.4" y="500.0" class="label" text-anchor="middle">0</text>
+<line x1="168.9" y1="480.0" x2="168.9" y2="485.0" class="axis"/>
+<line x1="168.9" y1="80.0" x2="168.9" y2="480.0" class="grid"/>
+<text x="168.9" y="500.0" class="label" text-anchor="middle">10</text>
+<line x1="213.3" y1="480.0" x2="213.3" y2="485.0" class="axis"/>
+<line x1="213.3" y1="80.0" x2="213.3" y2="480.0" class="grid"/>
+<text x="213.3" y="500.0" class="label" text-anchor="middle">20</text>
+<line x1="257.8" y1="480.0" x2="257.8" y2="485.0" class="axis"/>
+<line x1="257.8" y1="80.0" x2="257.8" y2="480.0" class="grid"/>
+<text x="257.8" y="500.0" class="label" text-anchor="middle">30</text>
+<line x1="302.2" y1="480.0" x2="302.2" y2="485.0" class="axis"/>
+<line x1="302.2" y1="80.0" x2="302.2" y2="480.0" class="grid"/>
+<text x="302.2" y="500.0" class="label" text-anchor="middle">40</text>
+<line x1="346.7" y1="480.0" x2="346.7" y2="485.0" class="axis"/>
+<line x1="346.7" y1="80.0" x2="346.7" y2="480.0" class="grid"/>
+<text x="346.7" y="500.0" class="label" text-anchor="middle">50</text>
+<line x1="391.1" y1="480.0" x2="391.1" y2="485.0" class="axis"/>
+<line x1="391.1" y1="80.0" x2="391.1" y2="480.0" class="grid"/>
+<text x="391.1" y="500.0" class="label" text-anchor="middle">60</text>
+<line x1="435.6" y1="480.0" x2="435.6" y2="485.0" class="axis"/>
+<line x1="435.6" y1="80.0" x2="435.6" y2="480.0" class="grid"/>
+<text x="435.6" y="500.0" class="label" text-anchor="middle">70</text>
+<line x1="480.0" y1="480.0" x2="480.0" y2="485.0" class="axis"/>
+<text x="480.0" y="500.0" class="label" text-anchor="middle">80</text>
+<line x1="75.0" y1="80.0" x2="80.0" y2="80.0" class="axis"/>
+<text x="70.0" y="84.0" class="label" text-anchor="end">0</text>
+<line x1="75.0" y1="124.4" x2="80.0" y2="124.4" class="axis"/>
+<line x1="80.0" y1="124.4" x2="480.0" y2="124.4" class="grid"/>
+<text x="70.0" y="128.4" class="label" text-anchor="end">0</text>
+<line x1="75.0" y1="168.9" x2="80.0" y2="168.9" class="axis"/>
+<line x1="80.0" y1="168.9" x2="480.0" y2="168.9" class="grid"/>
+<text x="70.0" y="172.9" class="label" text-anchor="end">10</text>
+<line x1="75.0" y1="213.3" x2="80.0" y2="213.3" class="axis"/>
+<line x1="80.0" y1="213.3" x2="480.0" y2="213.3" class="grid"/>
+<text x="70.0" y="217.3" class="label" text-anchor="end">20</text>
+<line x1="75.0" y1="257.8" x2="80.0" y2="257.8" class="axis"/>
+<line x1="80.0" y1="257.8" x2="480.0" y2="257.8" class="grid"/>
+<text x="70.0" y="261.8" class="label" text-anchor="end">30</text>
+<line x1="75.0" y1="302.2" x2="80.0" y2="302.2" class="axis"/>
+<line x1="80.0" y1="302.2" x2="480.0" y2="302.2" class="grid"/>
+<text x="70.0" y="306.2" class="label" text-anchor="end">40</text>
+<line x1="75.0" y1="346.7" x2="80.0" y2="346.7" class="axis"/>
+<line x1="80.0" y1="346.7" x2="480.0" y2="346.7" class="grid"/>
+<text x="70.0" y="350.7" class="label" text-anchor="end">50</text>
+<line x1="75.0" y1="391.1" x2="80.0" y2="391.1" class="axis"/>
+<line x1="80.0" y1="391.1" x2="480.0" y2="391.1" class="grid"/>
+<text x="70.0" y="395.1" class="label" text-anchor="end">60</text>
+<line x1="75.0" y1="435.6" x2="80.0" y2="435.6" class="axis"/>
+<line x1="80.0" y1="435.6" x2="480.0" y2="435.6" class="grid"/>
+<text x="70.0" y="439.6" class="label" text-anchor="end">70</text>
+<line x1="75.0" y1="480.0" x2="80.0" y2="480.0" class="axis"/>
+<text x="70.0" y="484.0" class="label" text-anchor="end">80</text>
+<text x="280.0" y="540.0" class="title">Sequence 1 (nucleotide position)</text>
+<text x="20.0" y="280.0" class="title" transform="rotate(-90 20 280)">Sequence 2 (nucleotide position)</text>
+</svg>
