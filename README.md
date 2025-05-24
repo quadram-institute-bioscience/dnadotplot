@@ -5,7 +5,7 @@
 
 A Rust tool for generating dot plot alignments between DNA sequences from FASTA files.
 
-![DNA Dot plot](./tests/page/generated-imgs/seq1-seq2-wnd10-w0.3.png)
+![DNA Dot plot](./tests/page/generated-imgs/seq1-seq2-wnd10-w1.svg)
 
 ## Installation
 
