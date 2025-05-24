@@ -2,6 +2,8 @@
 
 A Rust tool for generating dot plot alignments between DNA sequences from FASTA files.
 
+![DNA Dot plot](./tests/page/generated-imgs/seq1-seq1-wnd10-w1.svg)
+
 ## Installation
 
 ```bash
@@ -20,6 +22,8 @@ cargo build --release
 - `-2, --second-file`: Second FASTA file (optional, defaults to self-alignment)
 - `-o, --output`: Output PNG file (required)
 - `-w, --width`: Image size - pixels if >1, fraction of sequence length if <1 (default: 0.3)
+- `--window`: Window size for alignment (default: 10)
+- `--revcompl`: Use reverse complement of the first sequence
 - `-f, --first-name`: Specific sequence name from first file
 - `-s, --second-name`: Specific sequence name from second file
 
@@ -48,6 +52,7 @@ python3 generate_comparison.py
 ```
 
 This command will:
+
 1. Parse reference images in `tests/page/img/` with format `{seq1}-{seq2}-wnd{window}-w{width_ratio}.{format}`
 2. Generate corresponding images using dnadotplot with `--revcompl` flag
 3. Save generated images to `tests/page/generated-imgs/`

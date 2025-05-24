@@ -4,3 +4,4 @@ tests/output/*.svg
 *.md
 !./README.md
 Cargo.lock
+.vscode/
