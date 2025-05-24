@@ -40,7 +40,7 @@ fn main() {
             .value_name("STR")
             .help("Name of the FASTA sequence in the first file"))
         .arg(Arg::new("second-name")
-            .short('s')
+            .short('n')
             .long("second-name")
             .value_name("STR")
             .help("Name of the FASTA sequence in the second file"))
@@ -50,13 +50,14 @@ fn main() {
             .value_name("FILE_PNG")
             .help("Path to the output file (PNG)")
             .required(true))
-        .arg(Arg::new("width")
-            .short('w')
-            .long("width")
+        .arg(Arg::new("img_size")
+            .short('s')
+            .long("img-size")
             .value_name("FLOAT")
             .help("Image size: if >1 use as pixels, if <1 use as fraction of longest sequence")
             .default_value("0.3"))
         .arg(Arg::new("window")
+            .short('w')
             .long("window")
             .value_name("INT")
             .help("Window size for matching (default: 10)")
@@ -78,7 +79,7 @@ fn main() {
         first_name: matches.get_one::<String>("first-name").map(|s| s.clone()),
         second_name: matches.get_one::<String>("second-name").map(|s| s.clone()),
         output: matches.get_one::<String>("output").unwrap().clone(),
-        width: matches.get_one::<String>("width").unwrap().parse().expect("Invalid width value"),
+        width: matches.get_one::<String>("img_size").unwrap().parse().expect("Invalid width value"),
         window: matches.get_one::<String>("window").unwrap().parse().expect("Invalid window value"),
         revcompl: matches.get_flag("revcompl"),
         svg: matches.get_flag("svg"),

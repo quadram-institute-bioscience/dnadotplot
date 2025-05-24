@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
+"""
+generate_comparison.py - DNA Dot Plot Testing Utility
 
+This script debugs and validates coordinate mapping between sequence positions 
+and image coordinates in DNA dot plot visualization. It's part of the testing 
+utilities for the DNA Dot Plot project.
+
+The script performs the following analysis:
+1. Maps sequence positions to image coordinates using the same algorithm as Rust code
+2. Identifies which image coordinates are used and unused
+3. Detects gaps or missing coordinates in the mapping
+4. Validates the coordinate transformation for sliding window analysis
+
+Key parameters:
+- seq_len: Length of the DNA sequence (84 bases)
+- image_size: Output image dimensions (84x84 pixels)  
+- window_size: Sliding window size for comparison (10 bases)
+
+The coordinate mapping uses: img_coord = int((pos / seq_len * image_size) + 0.5)
+This ensures proper rounding and alignment between sequence space and image space.
+"""
 import os
 import re
 import subprocess
@@ -39,7 +59,7 @@ def generate_dotplot(seq1_file, seq2_file, window, width_ratio, output_file, is_
     if not is_self_comparison:
         cmd.extend(["-2", str(seq2_file)])
     
-    cmd.extend(["-w", str(width_ratio), "--window", str(window), "-o", str(output_file)])
+    cmd.extend(["--img-size", str(width_ratio), "--window", str(window), "-o", str(output_file)])
     
     if output_format.lower() == "svg":
         cmd.append("--svg")

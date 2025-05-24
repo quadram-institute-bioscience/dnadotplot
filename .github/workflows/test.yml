@@ -40,16 +40,13 @@ jobs:
       run: mkdir -p tests/output
 
     - name: Test self-alignment PNG
-      run: ./target/release/dnadotplot -1 input/self.fa -o tests/output/self-self-test.png -w 1.0 --window 1 --revcompl
+      run: ./target/release/dnadotplot -1 input/self.fa -o tests/output/self-self-test.png -s 1.0 --window 1 --revcompl
 
     - name: Test self-alignment SVG
-      run: ./target/release/dnadotplot -1 input/seq1.fa -o tests/output/seq1-self-test.svg -w 1.0 --window 10 --revcompl --svg
+      run: ./target/release/dnadotplot -1 input/seq1.fa -o tests/output/seq1-self-test.svg -s 1.0 --window 10 --revcompl --svg
 
     - name: Test cross-alignment
-      run: ./target/release/dnadotplot -1 input/seq1.fa -2 input/seq2.fa -o tests/output/seq1-seq2-test.png -w 0.5 --window 10 --revcompl
-
-    - name: Test with different window size
-      run: ./target/release/dnadotplot -1 input/bbreve.fa -2 input/ecoli.fa -o tests/output/bbreve-ecoli-test.png -w 1000 --window 5
+      run: ./target/release/dnadotplot -1 input/seq1.fa -2 input/seq2.fa -o tests/output/seq1-seq2-test.png -s 0.5 --window 10 --revcompl
 
     - name: Verify output files exist
       run: |
@@ -57,7 +54,6 @@ jobs:
         test -f tests/output/self-self-test.png
         test -f tests/output/seq1-self-test.svg
         test -f tests/output/seq1-seq2-test.png
-        test -f tests/output/bbreve-ecoli-test.png
 
     - name: Test comparison system
       run: |

@@ -1,5 +1,26 @@
 #!/usr/bin/env python3
+"""
+debug_coords.py - DNA Dot Plot Coordinate Mapping Debugger
 
+This debugging utility validates the coordinate transformation system used in 
+DNA dot plot generation. It's part of the testing suite for the DNA Dot Plot 
+project, specifically focused on ensuring accurate mapping between biological 
+sequence positions and image pixel coordinates.
+
+Functionality:
+- Tests coordinate mapping for sliding window analysis (window size = 10)
+- Validates that sequence positions map correctly to image coordinates
+- Identifies potential gaps or overlaps in the coordinate space
+- Ensures the rounding algorithm matches the Rust implementation
+
+The script uses the same coordinate transformation as the main application:
+img_coord = int((pos / seq_len * image_size) + 0.5)
+
+This helps identify issues like:
+- Missing image coordinates that should be populated
+- Coordinate collisions where multiple sequence positions map to same pixel
+- Boundary condition problems at sequence edges
+"""
 # Debug coordinate mapping
 seq_len = 84
 image_size = 84  # width_param = 1.0, so image_size = 84

@@ -1,4 +1,26 @@
 #!/usr/bin/env python3
+"""
+dotplot.py - DNA Dot Plot Window Matching Logic Debugger
+
+This debugging script validates the sliding window matching algorithm used in 
+DNA dot plot generation. It's part of the DNA Dot Plot project's testing suite,
+focused on ensuring correct self-comparison logic for sequence analysis.
+
+Purpose:
+- Verifies that every sequence position can generate a valid window for comparison
+- Tests the diagonal matching logic (sequence vs itself) 
+- Identifies potential gaps in window coverage across the sequence
+- Debugs specific problematic positions identified during development
+
+The script performs self-comparison where every window should match itself,
+creating a perfect diagonal in the dot plot matrix. Any missing matches
+indicate issues with the windowing algorithm.
+
+Key validation points:
+- All positions from 0 to (seq_len - window_size) should be valid
+- Self-matching windows should always return True
+- No gaps should exist in the diagonal pattern
+"""
 
 # Simple debug script to check window matching logic
 sequence = "CTTGGTCATTTAGAGGAAGTAAAAGTCGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTAAAGAAATTTAATAATT"

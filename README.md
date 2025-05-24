@@ -2,9 +2,11 @@
 
 A Rust tool for generating dot plot alignments between DNA sequences from FASTA files.
 
-![DNA Dot plot](./tests/page/generated-imgs/seq1-seq1-wnd10-w1.svg)
+![DNA Dot plot](./tests/page/generated-imgs/seq1-seq2-wnd10-w0.3.png)
 
 ## Installation
+
+Currently, the project requires Rust and Cargo to build. Follow these steps to install:
 
 ```bash
 cargo build --release
@@ -18,26 +20,26 @@ cargo build --release
 
 ### Options
 
-- `-1, --first-file`: First FASTA file (required)
-- `-2, --second-file`: Second FASTA file (optional, defaults to self-alignment)
-- `-o, --output`: Output PNG file (required)
-- `-w, --width`: Image size - pixels if >1, fraction of sequence length if <1 (default: 0.3)
-- `--window`: Window size for alignment (default: 10)
+- `-1`, `--first-file`: First FASTA file (required)
+- `-2`, `--second-file`: Second FASTA file (optional, defaults to self-alignment)
+- `-o`, `--output`: Output PNG file (required)
+- `-s`, `--img-size`: Image size - pixels if >1, fraction of sequence length if <1 (default: 0.3)
+- `-w`, `--window`: Window size for alignment (default: 10)
 - `--revcompl`: Use reverse complement of the first sequence
-- `-f, --first-name`: Specific sequence name from first file
-- `-s, --second-name`: Specific sequence name from second file
+- `-f`, `--first-name`: Specific sequence name from first file
+- `-n`, `--second-name`: Specific sequence name from second file
 
 ## Examples
 
 ```bash
 # Self-alignment of E. coli genome
-./target/release/dnadotplot -1 input/ecoli.fa -o ecoli_self.png -w 1000
+./target/release/dnadotplot -1 input/ecoli.fa -o ecoli_self.png -s 1000
 
 # Cross-alignment between two genomes
 ./target/release/dnadotplot -1 input/bbreve.fa -2 input/ecoli.fa -o comparison.png
 
 # Use fraction of sequence length for image size
-./target/release/dnadotplot -1 genome.fa -o plot.png -w 0.5
+./target/release/dnadotplot -1 genome.fa -o plot.png -s 0.5
 ```
 
 The output is a grayscale PNG where black pixels indicate exact nucleotide matches and white pixels indicate no matches.
