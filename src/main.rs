@@ -183,9 +183,9 @@ fn generate_dotplot(seq1: &[u8], seq2: &[u8], width_param: f64, window: usize, r
         for seq2_pos in 0..=(seq2.len().saturating_sub(window)) {
             // Check for forward match
             if window_match(seq1, seq2, seq1_pos, seq2_pos, window) {
-                // Map sequence positions to image coordinates
-                let img_x = (seq1_pos as f64 / seq1.len() as f64 * image_size as f64) as usize;
-                let img_y = (seq2_pos as f64 / seq2.len() as f64 * image_size as f64) as usize;
+                // Map sequence positions to image coordinates with proper rounding
+                let img_x = ((seq1_pos as f64 / seq1.len() as f64 * image_size as f64) + 0.5) as usize;
+                let img_y = ((seq2_pos as f64 / seq2.len() as f64 * image_size as f64) + 0.5) as usize;
                 if img_x < image_size && img_y < image_size {
                     matrix[img_y][img_x] = 0;
                 }
@@ -193,8 +193,8 @@ fn generate_dotplot(seq1: &[u8], seq2: &[u8], width_param: f64, window: usize, r
             
             // Check for reverse complement match
             if revcompl && window_match_revcompl(seq1, seq2, seq1_pos, seq2_pos, window) {
-                let img_x = (seq1_pos as f64 / seq1.len() as f64 * image_size as f64) as usize;
-                let img_y = (seq2_pos as f64 / seq2.len() as f64 * image_size as f64) as usize;
+                let img_x = ((seq1_pos as f64 / seq1.len() as f64 * image_size as f64) + 0.5) as usize;
+                let img_y = ((seq2_pos as f64 / seq2.len() as f64 * image_size as f64) + 0.5) as usize;
                 if img_x < image_size && img_y < image_size {
                     matrix[img_y][img_x] = 128;
                 }
