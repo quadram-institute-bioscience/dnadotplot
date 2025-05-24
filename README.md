@@ -1,5 +1,8 @@
 # DNA Dot Plot Generator
 
+[![Test](https://github.com/quadram-institute-bioscience/dnadotplot/actions/workflows/test.yml/badge.svg)](https://github.com/quadram-institute-bioscience/dnadotplot/actions/workflows/test.yml)
+
+
 A Rust tool for generating dot plot alignments between DNA sequences from FASTA files.
 
 ![DNA Dot plot](./tests/page/generated-imgs/seq1-seq2-wnd10-w0.3.png)
