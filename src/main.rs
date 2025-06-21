@@ -120,7 +120,7 @@ fn read_fasta(filepath: &str, seq_name: Option<&str>) -> Result<Vec<u8>, Box<dyn
         Box::new(BufReader::new(file))
     };
 
-    let mut fasta_reader = fasta::Reader::new(reader);
+    let fasta_reader = fasta::Reader::new(reader);
     
     for result in fasta_reader.records() {
         let record = result?;
@@ -236,7 +236,7 @@ fn save_svg(matrix: &[Vec<u8>], output_path: &str, seq1_len: usize, seq2_len: us
     let mut file = File::create(output_path)?;
     
     // SVG header
-    writeln!(file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    writeln!(file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")?;
     writeln!(file, "<svg width=\"{:.0}\" height=\"{:.0}\" xmlns=\"http://www.w3.org/2000/svg\">", svg_size, svg_size)?;
     writeln!(file, "<defs>")?;
     writeln!(file, "<style>")?;
