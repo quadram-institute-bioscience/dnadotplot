@@ -1,10 +1,19 @@
 [package]
 name = "dnadotplot"
-version = "0.1.1"
+version = "0.1.4"
 edition = "2024"
+description = "Generate dot plot visualizations from DNA sequences"
+authors = ["Andrea Telatin <andrea.telatin@quadram.ac.uk>"]
+repository = "https://github.com/quadram-institute-bioscience/dnadotplot"
+readme = "README.md"
+keywords = ["bioinformatics", "genomics", "visualization", "dotplot", "fasta"]
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
 bio = "1.6"
 image = "0.24"
 flate2 = "1.0"
+
+[profile.release]
+lto = true
+codegen-units = 1
