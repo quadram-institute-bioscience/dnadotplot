@@ -64,3 +64,7 @@ This command will:
 4. Create an HTML comparison page at `tests/page/index.html`
 
 The system is flexible - new reference images following the naming convention will automatically be included in the comparison when the script is run.
+
+## License
+
+MIT
