@@ -4,7 +4,6 @@ use image::{ImageBuffer, Luma};
 use std::fs::File;
 use std::io::{BufReader, Read};
 use flate2::read::GzDecoder;
-use std::path::Path;
 
 #[derive(Debug)]
 struct Config {
@@ -47,8 +46,8 @@ fn main() {
         .arg(Arg::new("output")
             .short('o')
             .long("output")
-            .value_name("FILE_PNG")
-            .help("Path to the output file (PNG)")
+            .value_name("FILE")
+            .help("Path to the output file (PNG or SVG based on extension)")
             .required(true))
         .arg(Arg::new("img_size")
             .short('s')
@@ -69,20 +68,23 @@ fn main() {
             .action(clap::ArgAction::SetTrue))
         .arg(Arg::new("svg")
             .long("svg")
-            .help("Output as SVG with coordinate axes instead of PNG")
+            .help("Force SVG output (auto-detected from .svg extension)")
             .action(clap::ArgAction::SetTrue))
         .get_matches();
 
+    let output_path = matches.get_one::<String>("output").unwrap().clone();
+    let is_svg = matches.get_flag("svg") || output_path.ends_with(".svg");
+    
     let config = Config {
         first_file: matches.get_one::<String>("first-file").unwrap().clone(),
         second_file: matches.get_one::<String>("second-file").map(|s| s.clone()),
         first_name: matches.get_one::<String>("first-name").map(|s| s.clone()),
         second_name: matches.get_one::<String>("second-name").map(|s| s.clone()),
-        output: matches.get_one::<String>("output").unwrap().clone(),
+        output: output_path,
         width: matches.get_one::<String>("img_size").unwrap().parse().expect("Invalid width value"),
         window: matches.get_one::<String>("window").unwrap().parse().expect("Invalid window value"),
         revcompl: matches.get_flag("revcompl"),
-        svg: matches.get_flag("svg"),
+        svg: is_svg,
     };
 
     if let Err(e) = run(config) {

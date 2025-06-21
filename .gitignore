@@ -5,3 +5,4 @@ tests/output/*.svg
 !./README.md
 Cargo.lock
 .vscode/
+CLIMB_Strategy_Pitch.md
