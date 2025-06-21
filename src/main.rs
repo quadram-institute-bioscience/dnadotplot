@@ -20,7 +20,7 @@ struct Config {
 
 fn main() {
     let matches = Command::new("dnadotplot")
-        .version("0.1.0")
+        .version(env!("CARGO_PKG_VERSION"))
         .about("A DNA dot plot generator")
         .arg(Arg::new("first-file")
             .short('1')
