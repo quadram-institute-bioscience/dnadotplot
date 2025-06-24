@@ -1,6 +1,6 @@
 [package]
 name = "dnadotplot"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2024"
 description = "Generate dot plot visualizations from DNA sequences"
 authors = ["Andrea Telatin <andrea.telatin@quadram.ac.uk>"]
@@ -13,6 +13,7 @@ clap = { version = "4.0", features = ["derive"] }
 bio = "1.6"
 image = "0.24"
 flate2 = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
 
 [profile.release]
 lto = true

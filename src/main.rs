@@ -1,12 +1,25 @@
-use clap::{Arg, Command};
+use clap::{Arg, Command, ArgMatches};
 use bio::io::fasta;
 use image::{ImageBuffer, Luma};
 use std::fs::File;
-use std::io::{BufReader, Read};
+use std::io::{BufReader, Read, Write, BufRead};
 use flate2::read::GzDecoder;
+use std::collections::HashMap;
 
 #[derive(Debug)]
-struct Config {
+struct MatrixConfig {
+    first_file: String,
+    second_file: Option<String>,
+    first_name: Option<String>,
+    second_name: Option<String>,
+    output: String,
+    width: f64,
+    window: usize,
+    revcompl: bool,
+}
+
+#[derive(Debug)]
+struct PlotConfig {
     first_file: String,
     second_file: Option<String>,
     first_name: Option<String>,
@@ -18,64 +31,181 @@ struct Config {
     svg: bool,
 }
 
+#[derive(Debug)]
+struct RenderConfig {
+    input_matrix: String,
+    output: String,
+    svg: bool,
+}
+
+#[derive(Debug)]
+struct MatrixMetadata {
+    sequence1_name: String,
+    sequence1_length: usize,
+    sequence2_name: String,
+    sequence2_length: usize,
+    window_size: usize,
+    reverse_complement: bool,
+    image_size: usize,
+    creation_date: String,
+    command: String,
+}
+
 fn main() {
     let matches = Command::new("dnadotplot")
         .version(env!("CARGO_PKG_VERSION"))
         .about("A DNA dot plot generator")
-        .arg(Arg::new("first-file")
-            .short('1')
-            .long("first-file")
-            .value_name("FILE")
-            .help("Path to the first FASTA file (can be gzipped)")
-            .required(true))
-        .arg(Arg::new("second-file")
-            .short('2')
-            .long("second-file")
-            .value_name("FILE")
-            .help("Path to the second FASTA file (if omitted, self alignment of the first)"))
-        .arg(Arg::new("first-name")
-            .short('f')
-            .long("first-name")
-            .value_name("STR")
-            .help("Name of the FASTA sequence in the first file"))
-        .arg(Arg::new("second-name")
-            .short('n')
-            .long("second-name")
-            .value_name("STR")
-            .help("Name of the FASTA sequence in the second file"))
-        .arg(Arg::new("output")
-            .short('o')
-            .long("output")
-            .value_name("FILE")
-            .help("Path to the output file (PNG or SVG based on extension)")
-            .required(true))
-        .arg(Arg::new("img_size")
-            .short('s')
-            .long("img-size")
-            .value_name("FLOAT")
-            .help("Image size: if >1 use as pixels, if <1 use as fraction of longest sequence")
-            .default_value("0.3"))
-        .arg(Arg::new("window")
-            .short('w')
-            .long("window")
-            .value_name("INT")
-            .help("Window size for matching (default: 10)")
-            .default_value("10"))
-        .arg(Arg::new("revcompl")
-            .short('r')
-            .long("revcompl")
-            .help("Also look for reverse complement matches")
-            .action(clap::ArgAction::SetTrue))
-        .arg(Arg::new("svg")
-            .long("svg")
-            .help("Force SVG output (auto-detected from .svg extension)")
-            .action(clap::ArgAction::SetTrue))
+        .subcommand_required(true)
+        .arg_required_else_help(true)
+        .subcommand(
+            Command::new("plot")
+                .about("Generate dot plot directly from FASTA sequences")
+                .arg(Arg::new("first-file")
+                    .short('1')
+                    .long("first-file")
+                    .value_name("FILE")
+                    .help("Path to the first FASTA file (can be gzipped)")
+                    .required(true))
+                .arg(Arg::new("second-file")
+                    .short('2')
+                    .long("second-file")
+                    .value_name("FILE")
+                    .help("Path to the second FASTA file (if omitted, self alignment of the first)"))
+                .arg(Arg::new("first-name")
+                    .short('f')
+                    .long("first-name")
+                    .value_name("STR")
+                    .help("Name of the FASTA sequence in the first file"))
+                .arg(Arg::new("second-name")
+                    .short('n')
+                    .long("second-name")
+                    .value_name("STR")
+                    .help("Name of the FASTA sequence in the second file"))
+                .arg(Arg::new("output")
+                    .short('o')
+                    .long("output")
+                    .value_name("FILE")
+                    .help("Path to the output file (PNG or SVG based on extension)")
+                    .required(true))
+                .arg(Arg::new("img_size")
+                    .short('s')
+                    .long("img-size")
+                    .value_name("FLOAT")
+                    .help("Image size: if >1 use as pixels, if <1 use as fraction of longest sequence")
+                    .default_value("0.3"))
+                .arg(Arg::new("window")
+                    .short('w')
+                    .long("window")
+                    .value_name("INT")
+                    .help("Window size for matching (default: 10)")
+                    .default_value("10"))
+                .arg(Arg::new("revcompl")
+                    .short('r')
+                    .long("revcompl")
+                    .help("Also look for reverse complement matches")
+                    .action(clap::ArgAction::SetTrue))
+                .arg(Arg::new("svg")
+                    .long("svg")
+                    .help("Force SVG output (auto-detected from .svg extension)")
+                    .action(clap::ArgAction::SetTrue))
+        )
+        .subcommand(
+            Command::new("matrix")
+                .about("Generate dot plot matrix from FASTA sequences")
+                .arg(Arg::new("first-file")
+                    .short('1')
+                    .long("first-file")
+                    .value_name("FILE")
+                    .help("Path to the first FASTA file (can be gzipped)")
+                    .required(true))
+                .arg(Arg::new("second-file")
+                    .short('2')
+                    .long("second-file")
+                    .value_name("FILE")
+                    .help("Path to the second FASTA file (if omitted, self alignment of the first)"))
+                .arg(Arg::new("first-name")
+                    .short('f')
+                    .long("first-name")
+                    .value_name("STR")
+                    .help("Name of the FASTA sequence in the first file"))
+                .arg(Arg::new("second-name")
+                    .short('n')
+                    .long("second-name")
+                    .value_name("STR")
+                    .help("Name of the FASTA sequence in the second file"))
+                .arg(Arg::new("output")
+                    .short('o')
+                    .long("output")
+                    .value_name("FILE")
+                    .help("Path to the output matrix file (.tsv)")
+                    .required(true))
+                .arg(Arg::new("img_size")
+                    .short('s')
+                    .long("img-size")
+                    .value_name("FLOAT")
+                    .help("Image size: if >1 use as pixels, if <1 use as fraction of longest sequence")
+                    .default_value("0.3"))
+                .arg(Arg::new("window")
+                    .short('w')
+                    .long("window")
+                    .value_name("INT")
+                    .help("Window size for matching (default: 10)")
+                    .default_value("10"))
+                .arg(Arg::new("revcompl")
+                    .short('r')
+                    .long("revcompl")
+                    .help("Also look for reverse complement matches")
+                    .action(clap::ArgAction::SetTrue))
+        )
+        .subcommand(
+            Command::new("render")
+                .about("Render dot plot image from matrix file")
+                .arg(Arg::new("input")
+                    .short('i')
+                    .long("input")
+                    .value_name("FILE")
+                    .help("Path to the input matrix file (.tsv)")
+                    .required(true))
+                .arg(Arg::new("output")
+                    .short('o')
+                    .long("output")
+                    .value_name("FILE")
+                    .help("Path to the output file (PNG or SVG based on extension)")
+                    .required(true))
+                .arg(Arg::new("svg")
+                    .long("svg")
+                    .help("Force SVG output (auto-detected from .svg extension)")
+                    .action(clap::ArgAction::SetTrue))
+        )
         .get_matches();
 
+    let result = match matches.subcommand() {
+        Some(("plot", sub_matches)) => {
+            let config = parse_plot_config(sub_matches);
+            run_plot(config)
+        }
+        Some(("matrix", sub_matches)) => {
+            let config = parse_matrix_config(sub_matches);
+            run_matrix(config)
+        }
+        Some(("render", sub_matches)) => {
+            let config = parse_render_config(sub_matches);
+            run_render(config)
+        }
+        _ => unreachable!("Exhausted list of subcommands and subcommand_required prevents `None`"),
+    };
+
+    if let Err(e) = result {
+        eprintln!("Error: {}", e);
+        std::process::exit(1);
+    }
+}
+
+fn parse_plot_config(matches: &ArgMatches) -> PlotConfig {
     let output_path = matches.get_one::<String>("output").unwrap().clone();
     let is_svg = matches.get_flag("svg") || output_path.ends_with(".svg");
     
-    let config = Config {
+    PlotConfig {
         first_file: matches.get_one::<String>("first-file").unwrap().clone(),
         second_file: matches.get_one::<String>("second-file").map(|s| s.clone()),
         first_name: matches.get_one::<String>("first-name").map(|s| s.clone()),
@@ -85,15 +215,34 @@ fn main() {
         window: matches.get_one::<String>("window").unwrap().parse().expect("Invalid window value"),
         revcompl: matches.get_flag("revcompl"),
         svg: is_svg,
-    };
-
-    if let Err(e) = run(config) {
-        eprintln!("Error: {}", e);
-        std::process::exit(1);
     }
 }
 
-fn run(config: Config) -> Result<(), Box<dyn std::error::Error>> {
+fn parse_matrix_config(matches: &ArgMatches) -> MatrixConfig {
+    MatrixConfig {
+        first_file: matches.get_one::<String>("first-file").unwrap().clone(),
+        second_file: matches.get_one::<String>("second-file").map(|s| s.clone()),
+        first_name: matches.get_one::<String>("first-name").map(|s| s.clone()),
+        second_name: matches.get_one::<String>("second-name").map(|s| s.clone()),
+        output: matches.get_one::<String>("output").unwrap().clone(),
+        width: matches.get_one::<String>("img_size").unwrap().parse().expect("Invalid width value"),
+        window: matches.get_one::<String>("window").unwrap().parse().expect("Invalid window value"),
+        revcompl: matches.get_flag("revcompl"),
+    }
+}
+
+fn parse_render_config(matches: &ArgMatches) -> RenderConfig {
+    let output_path = matches.get_one::<String>("output").unwrap().clone();
+    let is_svg = matches.get_flag("svg") || output_path.ends_with(".svg");
+    
+    RenderConfig {
+        input_matrix: matches.get_one::<String>("input").unwrap().clone(),
+        output: output_path,
+        svg: is_svg,
+    }
+}
+
+fn run_plot(config: PlotConfig) -> Result<(), Box<dyn std::error::Error>> {
     let seq1 = read_fasta(&config.first_file, config.first_name.as_deref())?;
     let seq2 = if let Some(ref file) = config.second_file {
         read_fasta(file, config.second_name.as_deref())?
@@ -110,6 +259,134 @@ fn run(config: Config) -> Result<(), Box<dyn std::error::Error>> {
     
     println!("Dot plot saved to {}", config.output);
     Ok(())
+}
+
+fn run_matrix(config: MatrixConfig) -> Result<(), Box<dyn std::error::Error>> {
+    let seq1 = read_fasta(&config.first_file, config.first_name.as_deref())?;
+    let seq2 = if let Some(ref file) = config.second_file {
+        read_fasta(file, config.second_name.as_deref())?
+    } else {
+        seq1.clone()
+    };
+
+    let dotplot = generate_dotplot(&seq1, &seq2, config.width, config.window, config.revcompl)?;
+    
+    // Create metadata
+    let seq1_name = config.first_name.as_ref()
+        .map(|s| s.clone())
+        .unwrap_or_else(|| extract_filename(&config.first_file));
+    
+    let seq2_name = if let Some(ref file) = config.second_file {
+        config.second_name.as_ref()
+            .map(|s| s.clone())
+            .unwrap_or_else(|| extract_filename(file))
+    } else {
+        seq1_name.clone()
+    };
+    
+    let metadata = MatrixMetadata {
+        sequence1_name: seq1_name,
+        sequence1_length: seq1.len(),
+        sequence2_name: seq2_name,
+        sequence2_length: seq2.len(),
+        window_size: config.window,
+        reverse_complement: config.revcompl,
+        image_size: dotplot.len(),
+        creation_date: chrono::Utc::now().format("%Y-%m-%dT%H:%M:%SZ").to_string(),
+        command: std::env::args().collect::<Vec<String>>().join(" "),
+    };
+    
+    save_matrix(&dotplot, &metadata, &config.output)?;
+    println!("Matrix saved to {}", config.output);
+    Ok(())
+}
+
+fn run_render(config: RenderConfig) -> Result<(), Box<dyn std::error::Error>> {
+    let (matrix, metadata) = load_matrix(&config.input_matrix)?;
+    
+    if config.svg {
+        save_svg(&matrix, &config.output, metadata.sequence1_length, metadata.sequence2_length)?;
+    } else {
+        save_image(&matrix, &config.output)?;
+    }
+    
+    println!("Image rendered to {}", config.output);
+    Ok(())
+}
+
+fn extract_filename(filepath: &str) -> String {
+    std::path::Path::new(filepath)
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .unwrap_or("unknown")
+        .to_string()
+}
+
+fn save_matrix(matrix: &[Vec<u8>], metadata: &MatrixMetadata, output_path: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let mut file = File::create(output_path)?;
+    
+    // Write metadata headers
+    writeln!(file, "# DNADOTPLOT_MATRIX_FORMAT_VERSION=1.0")?;
+    writeln!(file, "# sequence1_name={}", metadata.sequence1_name)?;
+    writeln!(file, "# sequence1_length={}", metadata.sequence1_length)?;
+    writeln!(file, "# sequence2_name={}", metadata.sequence2_name)?;
+    writeln!(file, "# sequence2_length={}", metadata.sequence2_length)?;
+    writeln!(file, "# window_size={}", metadata.window_size)?;
+    writeln!(file, "# reverse_complement={}", metadata.reverse_complement)?;
+    writeln!(file, "# image_size={}", metadata.image_size)?;
+    writeln!(file, "# creation_date={}", metadata.creation_date)?;
+    writeln!(file, "# command={}", metadata.command)?;
+    
+    // Write matrix data
+    for row in matrix {
+        let row_str: Vec<String> = row.iter().map(|&val| val.to_string()).collect();
+        writeln!(file, "{}", row_str.join("\t"))?;
+    }
+    
+    Ok(())
+}
+
+fn load_matrix(input_path: &str) -> Result<(Vec<Vec<u8>>, MatrixMetadata), Box<dyn std::error::Error>> {
+    let file = File::open(input_path)?;
+    let reader = BufReader::new(file);
+    
+    let mut metadata = HashMap::new();
+    let mut matrix = Vec::new();
+    
+    for line in reader.lines() {
+        let line = line?;
+        
+        if line.starts_with('#') {
+            // Parse metadata
+            if let Some(stripped) = line.strip_prefix("# ") {
+                if let Some((key, value)) = stripped.split_once('=') {
+                    metadata.insert(key.to_string(), value.to_string());
+                }
+            }
+        } else if !line.trim().is_empty() {
+            // Parse matrix row
+            let row: Result<Vec<u8>, _> = line
+                .split('\t')
+                .map(|s| s.parse::<u8>())
+                .collect();
+            matrix.push(row?);
+        }
+    }
+    
+    // Build metadata struct
+    let matrix_metadata = MatrixMetadata {
+        sequence1_name: metadata.get("sequence1_name").cloned().unwrap_or_else(|| "unknown".to_string()),
+        sequence1_length: metadata.get("sequence1_length").and_then(|s| s.parse().ok()).unwrap_or(0),
+        sequence2_name: metadata.get("sequence2_name").cloned().unwrap_or_else(|| "unknown".to_string()),
+        sequence2_length: metadata.get("sequence2_length").and_then(|s| s.parse().ok()).unwrap_or(0),
+        window_size: metadata.get("window_size").and_then(|s| s.parse().ok()).unwrap_or(10),
+        reverse_complement: metadata.get("reverse_complement").and_then(|s| s.parse().ok()).unwrap_or(false),
+        image_size: metadata.get("image_size").and_then(|s| s.parse().ok()).unwrap_or(matrix.len()),
+        creation_date: metadata.get("creation_date").cloned().unwrap_or_else(|| "unknown".to_string()),
+        command: metadata.get("command").cloned().unwrap_or_else(|| "unknown".to_string()),
+    };
+    
+    Ok((matrix, matrix_metadata))
 }
 
 fn read_fasta(filepath: &str, seq_name: Option<&str>) -> Result<Vec<u8>, Box<dyn std::error::Error>> {

@@ -53,7 +53,7 @@ def find_input_file(seq_name, input_dir):
 
 def generate_dotplot(seq1_file, seq2_file, window, width_ratio, output_file, is_self_comparison=False, output_format="png"):
     """Generate dotplot using the dnadotplot binary"""
-    cmd = ["./target/release/dnadotplot", "--revcompl"]
+    cmd = ["./target/release/dnadotplot", "plot", "--revcompl"]
     
     cmd.extend(["-1", str(seq1_file)])
     if not is_self_comparison:

@@ -6,3 +6,4 @@ tests/output/*.svg
 Cargo.lock
 .vscode/
 CLIMB_Strategy_Pitch.md
+.DS_Store
